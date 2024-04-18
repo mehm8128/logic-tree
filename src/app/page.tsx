@@ -32,7 +32,7 @@ function TreeBranch({
 }: { tree: Tree; setTree: Dispatch<SetStateAction<Tree>> }) {
 	const [showCurrentLevelBranch, setShowCurrentLevelBranch] = useState(false)
 	const addCurrentLevelBranch = () => {
-		setShowCurrentLevelBranch(true)
+		setShowCurrentLevelBranch(!showCurrentLevelBranch)
 	}
 
 	const handleSetTree = (newTree: SetStateAction<Tree>) => {
@@ -50,13 +50,14 @@ function TreeBranch({
 			)}
 			{tree.children.map((child, i) => (
 				<>
-					{i !== 0 && (
-						<div>
-							<div>|</div>
-						</div>
-					)}
-					<div key={child.id} className={styles.branchChild}>
-						----
+					{i !== 0 && <div className={styles.divider}>|</div>}
+					<div
+						key={child.id}
+						className={styles.branchChild}
+						data-notfirst={i !== 0}
+					>
+						--
+						{i === 0 && '--'}
 						<div className={styles.wordButtonContainer}>
 							<button
 								onClick={addCurrentLevelBranch}
@@ -71,12 +72,10 @@ function TreeBranch({
 				</>
 			))}
 			{showCurrentLevelBranch && (
-				<div>
-					<div>
-						<div>|</div>
-					</div>
+				<div className={styles.branchLastChild}>
+					<div>|</div>
 					<div className={styles.branchChild}>
-						----
+						---
 						<AddWord tree={tree} setTree={handleSetTree} />
 					</div>
 				</div>
@@ -122,15 +121,17 @@ function AddWord({
 	}
 
 	return (
-		<div>
+		<div className={styles.addWord}>
 			<input
 				value={value}
 				onChange={e => setValue(e.target.value)}
-				style={{
-					width: 100
-				}}
+				className={styles.input}
 			/>
-			<button onClick={() => settleWord(value)} type="button">
+			<button
+				onClick={() => settleWord(value)}
+				type="button"
+				className={styles.addButton}
+			>
 				Add
 			</button>
 		</div>

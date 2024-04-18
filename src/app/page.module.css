@@ -1,25 +1,72 @@
-.branchRoot{
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.branchRoot {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
 }
 .branchChild {
-  display: flex;
+	display: flex;
+}
+.branchChild[data-notfirst="true"] {
+	margin-left: 16px;
+}
+.branchLastChild {
+	margin-left: 16px;
 }
 .firstInput {
-  display: flex;
-  gap: 4px;
-  margin-left: 8px;
+	display: flex;
+	gap: 4px;
+	margin-left: 8px;
 }
-.wordButtonConatiner{
-  display: flex;
-  gap: 4px;
-  margin-left: 8px;
+.wordButtonConatiner {
+	display: flex;
+	gap: 4px;
+	margin-left: 8px;
 }
-.wordButton{
+.wordButton {
+	padding: 4px 8px;
+	border: 1px solid #000000;
+	background-color: #ffffff;
+	border-radius: 4px;
+	cursor: pointer;
+}
+.wordButton:hover {
+	background-color: #f0f0f0;
+}
+.wordButton:active {
+	background-color: #e0e0e0;
 }
 .word {
-  display: flex;
-  flex-direction: column;
-  margin-left: 8px;
+	display: flex;
+	flex-direction: column;
+	margin-left: 8px;
+}
+
+.input {
+	width: 120px;
+	height: 32px;
+	border-radius: 4px;
+	border: 1px solid #000000;
+	padding: 2px;
+}
+
+.addButton {
+	padding: 4px 8px;
+	border: 1px solid #000000;
+	background-color: #ffffff;
+	border-radius: 4px;
+	cursor: pointer;
+}
+.addButton:hover {
+	background-color: #f0f0f0;
+}
+.addButton:active {
+	background-color: #e0e0e0;
+}
+
+.addWord {
+	display: flex;
+	gap: 2px;
+}
+.divider {
+	padding-left: 16px;
 }
