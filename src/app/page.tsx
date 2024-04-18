@@ -30,8 +30,24 @@ function TreeBranch({
 	tree,
 	setTree
 }: { tree: Tree; setTree: Dispatch<SetStateAction<Tree>> }) {
+	const [showCurrentLevelBranch, setShowCurrentLevelBranch] = useState(false)
+	const addCurrentLevelBranch = () => {
+		setShowCurrentLevelBranch(true)
+	}
+
+	const handleSetTree = (newTree: SetStateAction<Tree>) => {
+		setTree(newTree)
+		setShowCurrentLevelBranch(false)
+	}
+
 	return (
 		<div className={styles.branchRoot}>
+			{tree.children.length === 0 && (
+				<div className={styles.firstInput}>
+					<span>----</span>
+					<AddWord tree={tree} setTree={setTree} />
+				</div>
+			)}
 			{tree.children.map((child, i) => (
 				<>
 					{i !== 0 && (
@@ -41,14 +57,30 @@ function TreeBranch({
 					)}
 					<div key={child.id} className={styles.branchChild}>
 						----
-						<div className={styles.word}>
-							{child.word}
-							<AddWord tree={child} setTree={setTree} />
+						<div className={styles.wordButtonContainer}>
+							<button
+								onClick={addCurrentLevelBranch}
+								type="button"
+								className={styles.wordButton}
+							>
+								{child.word}
+							</button>
 						</div>
 						<TreeBranch tree={child} setTree={setTree} />
 					</div>
 				</>
 			))}
+			{showCurrentLevelBranch && (
+				<div>
+					<div>
+						<div>|</div>
+					</div>
+					<div className={styles.branchChild}>
+						----
+						<AddWord tree={tree} setTree={handleSetTree} />
+					</div>
+				</div>
+			)}
 		</div>
 	)
 }
@@ -67,7 +99,6 @@ function AddWord({
 	setTree
 }: { tree: Tree; setTree: Dispatch<SetStateAction<Tree>> }) {
 	const [value, setValue] = useState<string>('')
-	const [open, setOpen] = useState<boolean>(tree.children.length === 0)
 
 	const addWord = (word: string, id: string) => {
 		if (word === '') return
@@ -88,15 +119,6 @@ function AddWord({
 	const settleWord = (word: string) => {
 		addWord(word, tree.id)
 		setValue('')
-		setOpen(false)
-	}
-
-	if (!open) {
-		return (
-			<button onClick={() => setOpen(!open)} type="button">
-				add
-			</button>
-		)
 	}
 
 	return (
