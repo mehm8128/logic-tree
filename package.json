@@ -1,0 +1,51 @@
+{
+	"name": "next-template",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"biome": "biome check --apply src",
+		"biome:ci": "biome ci src",
+		"lint:markup": "markuplint \"**/*.[jt]sx\"",
+		"type-check": "tsc --noEmit",
+		"test": "vitest --passWithNoTests --typecheck"
+	},
+	"dependencies": {
+		"@hookform/resolvers": "^3.3.4",
+		"@kuma-ui/core": "^1.5.6",
+		"@tanstack/react-query": "^5.18.1",
+		"@tanstack/react-query-next-experimental": "^5.18.1",
+		"jotai": "^2.6.4",
+		"next": "^14.1.0",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
+		"react-error-boundary": "^4.0.12",
+		"react-hook-form": "^7.50.0",
+		"typescript": "5.3.3",
+		"valibot": "^0.27.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.5.3",
+		"@kuma-ui/next-plugin": "^1.2.0",
+		"@markuplint/jsx-parser": "^4.0.0",
+		"@markuplint/react-spec": "^4.0.0",
+		"@testing-library/jest-dom": "^6.4.1",
+		"@testing-library/react": "^14.2.1",
+		"@testing-library/user-event": "^14.5.2",
+		"@types/jest": "^29.5.12",
+		"@types/node": "20.11.16",
+		"@types/react": "18.2.52",
+		"@types/react-dom": "18.2.18",
+		"@vitejs/plugin-react": "^4.2.1",
+		"jsdom": "^24.0.0",
+		"markuplint": "^4.0.0",
+		"msw": "^2.1.5",
+		"next-router-mock": "^0.9.11",
+		"vitest": "^1.2.2"
+	},
+	"msw": {
+		"workerDirectory": "public"
+	}
+}
