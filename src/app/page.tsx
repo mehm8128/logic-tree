@@ -41,7 +41,6 @@ export default function Page() {
 					setOpenContextMenuId={setOpenContextMenuId}
 				/>
 			</div>
-			{JSON.stringify(tree)}
 		</main>
 	)
 }
