@@ -9,6 +9,19 @@ interface Tree {
 	children: Tree[]
 }
 
+const searchTree = (tree: Tree, id: string, parent = false): Tree | null => {
+	if (parent) {
+		if (tree.children.some(child => child.id === id)) return tree
+	} else {
+		if (tree.id === id) return tree
+	}
+	for (const child of tree.children) {
+		const result = searchTree(child, id, parent)
+		if (result) return result
+	}
+	return null
+}
+
 export default function Page() {
 	const [tree, setTree] = useState<Tree>({
 		id: 'root',
@@ -28,6 +41,7 @@ export default function Page() {
 					setOpenContextMenuId={setOpenContextMenuId}
 				/>
 			</div>
+			{JSON.stringify(tree)}
 		</main>
 	)
 }
@@ -58,6 +72,7 @@ function TreeBranch({
 		setOpenContextMenuId(id)
 	}
 	const handleEdit = (id: string) => {
+		if (editingValue === '') return
 		setTree(prev => {
 			const newTree = structuredClone(prev)
 			const tree = searchTree(newTree, id)
@@ -71,7 +86,7 @@ function TreeBranch({
 	const handleDelete = (id: string) => {
 		setTree(prev => {
 			const newTree = structuredClone(prev)
-			const parent = searchTree(newTree, tree.id, true)
+			const parent = searchTree(newTree, id, true)
 			if (!parent) return prev
 			parent.children = parent.children.filter(child => child.id !== id)
 			return { ...newTree }
@@ -87,10 +102,7 @@ function TreeBranch({
 	return (
 		<div
 			className={styles.branchRoot}
-			onClick={() => {
-				setOpenContextMenuId(null)
-				console.log(openContextMenuId)
-			}}
+			onClick={() => setOpenContextMenuId(null)}
 			onKeyDown={() => {}}
 		>
 			{tree.children.length === 0 && (
@@ -186,19 +198,6 @@ function ContextMenu({
 			</button>
 		</div>
 	)
-}
-
-const searchTree = (tree: Tree, id: string, parent = false): Tree | null => {
-	if (parent) {
-		if (tree.children.some(child => child.id === id)) return tree
-	} else {
-		if (tree.id === id) return tree
-	}
-	for (const child of tree.children) {
-		const result = searchTree(child, id)
-		if (result) return result
-	}
-	return null
 }
 
 function AddWord({
