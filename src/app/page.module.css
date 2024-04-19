@@ -5,13 +5,19 @@
 	border: 1px solid #000000;
 	padding: 2px;
 }
-
 .button {
+	width: max-content;
 	padding: 4px 8px;
 	border: 1px solid #000000;
 	background-color: #ffffff;
 	border-radius: 4px;
 	cursor: pointer;
+}
+
+.main {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
 }
 
 .branchRoot {
@@ -76,19 +82,16 @@
 
 .contextMenu {
 	display: flex;
-	flex-direction: column;
+	align-items: center;
+	width: fit-content;
+	gap: 4px;
 	position: absolute;
-	top: 12px;
-	left: 12px;
+	top: 24px;
+	left: 24px;
 	z-index: 10;
 
 	background-color: #ffffff;
 	border: 1px solid #000000;
 	padding: 4px;
 	border-radius: 4px;
-}
-
-.editContainer {
-	display: flex;
-	gap: 4px;
 }

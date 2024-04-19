@@ -15,12 +15,18 @@ export default function Page() {
 		word: '',
 		children: []
 	})
+	const [openContextMenuId, setOpenContextMenuId] = useState<string | null>(null)
 
 	return (
-		<main>
+		<main className={styles.main}>
 			<AddWord tree={tree} setTree={setTree} />
 			<div>
-				<TreeBranch tree={tree} setTree={setTree} />
+				<TreeBranch
+					tree={tree}
+					setTree={setTree}
+					openContextMenuId={openContextMenuId}
+					setOpenContextMenuId={setOpenContextMenuId}
+				/>
 			</div>
 		</main>
 	)
@@ -28,12 +34,17 @@ export default function Page() {
 
 function TreeBranch({
 	tree,
-	setTree
-}: { tree: Tree; setTree: Dispatch<SetStateAction<Tree>> }) {
+	setTree,
+	openContextMenuId,
+	setOpenContextMenuId
+}: {
+	tree: Tree
+	setTree: Dispatch<SetStateAction<Tree>>
+	openContextMenuId: string | null
+	setOpenContextMenuId: Dispatch<SetStateAction<string | null>>
+}) {
 	const [showCurrentLevelBranch, setShowCurrentLevelBranch] = useState(false)
-	const [openContextMenuId, setOpenContextMenuId] = useState<string | null>(
-		null
-	)
+
 	const [editingValue, setEditingValue] = useState<string>('')
 	const addCurrentLevelBranch = () => {
 		setShowCurrentLevelBranch(!showCurrentLevelBranch)
@@ -76,7 +87,10 @@ function TreeBranch({
 	return (
 		<div
 			className={styles.branchRoot}
-			onClick={() => setOpenContextMenuId(null)}
+			onClick={() => {
+				setOpenContextMenuId(null)
+				console.log(openContextMenuId)
+			}}
 			onKeyDown={() => {}}
 		>
 			{tree.children.length === 0 && (
@@ -110,7 +124,12 @@ function TreeBranch({
 								/>
 							)}
 						</div>
-						<TreeBranch tree={child} setTree={setTree} />
+						<TreeBranch
+							tree={child}
+							setTree={setTree}
+							openContextMenuId={openContextMenuId}
+							setOpenContextMenuId={setOpenContextMenuId}
+						/>
 					</div>
 				</div>
 			))}
@@ -146,20 +165,18 @@ function ContextMenu({
 			onClick={e => e.stopPropagation()}
 			onKeyDown={() => {}}
 		>
-			<div className={styles.editContainer}>
-				<input
-					onChange={e => setEditingValue(e.target.value)}
-					value={editingValue}
-					className={styles.input}
-				/>
-				<button
-					onClick={() => handleEdit(child.id)}
-					type="button"
-					className={styles.button}
-				>
-					確定
-				</button>
-			</div>
+			<input
+				onChange={e => setEditingValue(e.target.value)}
+				value={editingValue}
+				className={styles.input}
+			/>
+			<button
+				onClick={() => handleEdit(child.id)}
+				type="button"
+				className={styles.button}
+			>
+				修正
+			</button>
 			<button
 				onClick={() => handleDelete(child.id)}
 				type="button"
