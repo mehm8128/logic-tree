@@ -1,3 +1,19 @@
+.input {
+	width: 120px;
+	height: 32px;
+	border-radius: 4px;
+	border: 1px solid #000000;
+	padding: 2px;
+}
+
+.button {
+	padding: 4px 8px;
+	border: 1px solid #000000;
+	background-color: #ffffff;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
 .branchRoot {
 	display: flex;
 	flex-direction: column;
@@ -17,12 +33,14 @@
 	gap: 4px;
 	margin-left: 8px;
 }
-.wordButtonConatiner {
+.wordButtonContainer {
 	display: flex;
 	gap: 4px;
 	margin-left: 8px;
+	position: relative;
 }
 .wordButton {
+	height: fit-content;
 	padding: 4px 8px;
 	border: 1px solid #000000;
 	background-color: #ffffff;
@@ -41,21 +59,6 @@
 	margin-left: 8px;
 }
 
-.input {
-	width: 120px;
-	height: 32px;
-	border-radius: 4px;
-	border: 1px solid #000000;
-	padding: 2px;
-}
-
-.addButton {
-	padding: 4px 8px;
-	border: 1px solid #000000;
-	background-color: #ffffff;
-	border-radius: 4px;
-	cursor: pointer;
-}
 .addButton:hover {
 	background-color: #f0f0f0;
 }
@@ -69,4 +72,23 @@
 }
 .divider {
 	padding-left: 16px;
+}
+
+.contextMenu {
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	top: 12px;
+	left: 12px;
+	z-index: 10;
+
+	background-color: #ffffff;
+	border: 1px solid #000000;
+	padding: 4px;
+	border-radius: 4px;
+}
+
+.editContainer {
+	display: flex;
+	gap: 4px;
 }
