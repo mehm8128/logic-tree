@@ -180,6 +180,8 @@ function ContextMenu({
 				onChange={e => setEditingValue(e.target.value)}
 				value={editingValue}
 				className={styles.input}
+				// biome-ignore lint/a11y/noAutofocus: 今回は許容
+				autoFocus
 			/>
 			<button
 				onClick={() => handleEdit(child.id)}
