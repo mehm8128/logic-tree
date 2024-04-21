@@ -28,7 +28,9 @@ export default function Page() {
 		word: '',
 		children: []
 	})
-	const [openContextMenuId, setOpenContextMenuId] = useState<string | null>(null)
+	const [openContextMenuId, setOpenContextMenuId] = useState<string | null>(
+		null
+	)
 
 	return (
 		<main className={styles.main}>
