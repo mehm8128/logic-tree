@@ -1,4 +1,4 @@
-import { Tree } from '@/app/page'
+import { Node } from '@/app/page'
 import { Dispatch, SetStateAction } from 'react'
 import styles from './ContextMenu.module.css'
 
@@ -13,7 +13,7 @@ export default function ContextMenu({
 	setEditingValue: Dispatch<SetStateAction<string>>
 	handleEdit: (id: string) => void
 	handleDelete: (id: string) => void
-	child: Tree
+	child: Node
 }) {
 	return (
 		<div
