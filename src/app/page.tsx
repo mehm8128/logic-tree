@@ -5,65 +5,34 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import ContextMenu from './_components/ContextMenu'
 import styles from './page.module.css'
 
-export interface Tree {
+export interface Node {
 	id: string
 	word: string
-	children: Tree[]
-}
-
-export const searchTree = (
-	tree: Tree,
-	id: string,
-	parent = false
-): Tree | null => {
-	if (parent) {
-		if (tree.children.some(child => child.id === id)) return tree
-	} else {
-		if (tree.id === id) return tree
-	}
-	for (const child of tree.children) {
-		const result = searchTree(child, id, parent)
-		if (result) return result
-	}
-	return null
 }
 
 export default function Page() {
-	const [tree, setTree] = useState<Tree>({
-		id: 'root',
-		word: '',
-		children: []
-	})
 	const [openContextMenuId, setOpenContextMenuId] = useState<string | null>(
 		null
 	)
 
 	return (
-		<main className={styles.main}>
-			<AddWord tree={tree} setTree={setTree} />
-			<div>
-				<TreeBranch
-					tree={tree}
-					setTree={setTree}
-					openContextMenuId={openContextMenuId}
-					setOpenContextMenuId={setOpenContextMenuId}
-				/>
-			</div>
+		<main>
+			<TreeBranch
+				openContextMenuId={openContextMenuId}
+				setOpenContextMenuId={setOpenContextMenuId}
+			/>
 		</main>
 	)
 }
 
 function TreeBranch({
-	tree,
-	setTree,
 	openContextMenuId,
 	setOpenContextMenuId
 }: {
-	tree: Tree
-	setTree: Dispatch<SetStateAction<Tree>>
 	openContextMenuId: string | null
 	setOpenContextMenuId: Dispatch<SetStateAction<string | null>>
 }) {
+	const [children, setChildren] = useState<Node[]>([])
 	const [showCurrentLevelBranch, setShowCurrentLevelBranch] = useState(false)
 
 	const [editingValue, setEditingValue] = useState<string>('')
@@ -78,31 +47,35 @@ function TreeBranch({
 		e.preventDefault()
 		setOpenContextMenuId(id)
 	}
-	const handleEdit = (id: string) => {
+	const handleEdit = (i: number, currentChild: Node) => {
 		if (editingValue === '') return
-		setTree(prev => {
-			const newTree = structuredClone(prev)
-			const tree = searchTree(newTree, id)
-			if (!tree) return prev
-			tree.word = editingValue
-			return { ...newTree }
-		})
+		const newChild = {
+			...currentChild,
+			word: editingValue
+		}
+		const newChildren = children.with(i, newChild)
+		setChildren(newChildren)
 		setEditingValue('')
 		setOpenContextMenuId(null)
 	}
 	const handleDelete = (id: string) => {
-		setTree(prev => {
-			const newTree = structuredClone(prev)
-			const parent = searchTree(newTree, id, true)
-			if (!parent) return prev
-			parent.children = parent.children.filter(child => child.id !== id)
-			return { ...newTree }
-		})
+		const newChildren = children.filter(child => child.id !== id)
+		setChildren(newChildren)
 		setOpenContextMenuId(null)
 	}
 
-	const handleSetTree = (newTree: SetStateAction<Tree>) => {
-		setTree(newTree)
+	const handleAddChild = (word: string) => {
+		const newChild = {
+			id: crypto.randomUUID(),
+			word,
+			children: []
+		}
+		const newChildren = [...children, newChild]
+		setChildren(newChildren)
+	}
+
+	const handleAddChild2 = (word: string) => {
+		handleAddChild(word)
 		setShowCurrentLevelBranch(false)
 	}
 
@@ -112,13 +85,13 @@ function TreeBranch({
 			onClick={() => setOpenContextMenuId(null)}
 			onKeyDown={() => {}}
 		>
-			{tree.children.length === 0 && (
+			{children.length === 0 && (
 				<div className={styles.firstInput}>
 					<span>----</span>
-					<AddWord tree={tree} setTree={setTree} />
+					<AddWord onAddWord={handleAddChild} />
 				</div>
 			)}
-			{tree.children.map((child, i) => (
+			{children.map((child, i) => (
 				<div key={child.id}>
 					{i !== 0 && <div className={styles.divider}>|</div>}
 					<div className={styles.branchChild} data-notfirst={i !== 0}>
@@ -137,15 +110,13 @@ function TreeBranch({
 								<ContextMenu
 									editingValue={editingValue}
 									setEditingValue={setEditingValue}
-									handleEdit={handleEdit}
+									handleEdit={() => handleEdit(i, child)}
 									handleDelete={handleDelete}
 									child={child}
 								/>
 							)}
 						</div>
 						<TreeBranch
-							tree={child}
-							setTree={setTree}
 							openContextMenuId={openContextMenuId}
 							setOpenContextMenuId={setOpenContextMenuId}
 						/>
@@ -157,11 +128,10 @@ function TreeBranch({
 					<div>|</div>
 					<div className={styles.branchChild}>
 						---
-						<AddWord tree={tree} setTree={handleSetTree} />
+						<AddWord onAddWord={handleAddChild2} />
 					</div>
 				</div>
 			)}
 		</div>
 	)
 }
-

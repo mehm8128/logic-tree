@@ -1,31 +1,16 @@
-import { Tree, searchTree } from '@/app/page'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import styles from './AddWord.module.css'
 
 export default function AddWord({
-	tree,
-	setTree
-}: { tree: Tree; setTree: Dispatch<SetStateAction<Tree>> }) {
+	onAddWord
+}: {
+	onAddWord: (word: string) => void
+}) {
 	const [value, setValue] = useState<string>('')
 
-	const addWord = (word: string, id: string) => {
-		if (word === '') return
-		setTree(prev => {
-			const newTree = structuredClone(prev)
-			// tree.idがidのところだけwordを更新する
-			const tree = searchTree(newTree, id)
-			if (!tree) return prev
-			tree.children.push({
-				id: crypto.randomUUID(),
-				word,
-				children: []
-			})
-			return { ...newTree }
-		})
-	}
-
 	const settleWord = (word: string) => {
-		addWord(word, tree.id)
+		if (word === '') return
+		onAddWord(word)
 		setValue('')
 	}
 
