@@ -1,15 +1,21 @@
 'use client'
 
+import AddWord from '@/app/_components/AddWord'
 import { Dispatch, SetStateAction, useState } from 'react'
+import ContextMenu from './_components/ContextMenu'
 import styles from './page.module.css'
 
-interface Tree {
+export interface Tree {
 	id: string
 	word: string
 	children: Tree[]
 }
 
-const searchTree = (tree: Tree, id: string, parent = false): Tree | null => {
+export const searchTree = (
+	tree: Tree,
+	id: string,
+	parent = false
+): Tree | null => {
 	if (parent) {
 		if (tree.children.some(child => child.id === id)) return tree
 	} else {
@@ -159,91 +165,3 @@ function TreeBranch({
 	)
 }
 
-function ContextMenu({
-	editingValue,
-	setEditingValue,
-	handleEdit,
-	handleDelete,
-	child
-}: {
-	editingValue: string
-	setEditingValue: Dispatch<SetStateAction<string>>
-	handleEdit: (id: string) => void
-	handleDelete: (id: string) => void
-	child: Tree
-}) {
-	return (
-		<div
-			className={styles.contextMenu}
-			onClick={e => e.stopPropagation()}
-			onKeyDown={() => {}}
-		>
-			<input
-				onChange={e => setEditingValue(e.target.value)}
-				value={editingValue}
-				className={styles.input}
-				// biome-ignore lint/a11y/noAutofocus: 今回は許容
-				autoFocus
-			/>
-			<button
-				onClick={() => handleEdit(child.id)}
-				type="button"
-				className={styles.button}
-			>
-				修正
-			</button>
-			<button
-				onClick={() => handleDelete(child.id)}
-				type="button"
-				className={styles.button}
-			>
-				削除
-			</button>
-		</div>
-	)
-}
-
-function AddWord({
-	tree,
-	setTree
-}: { tree: Tree; setTree: Dispatch<SetStateAction<Tree>> }) {
-	const [value, setValue] = useState<string>('')
-
-	const addWord = (word: string, id: string) => {
-		if (word === '') return
-		setTree(prev => {
-			const newTree = structuredClone(prev)
-			// tree.idがidのところだけwordを更新する
-			const tree = searchTree(newTree, id)
-			if (!tree) return prev
-			tree.children.push({
-				id: crypto.randomUUID(),
-				word,
-				children: []
-			})
-			return { ...newTree }
-		})
-	}
-
-	const settleWord = (word: string) => {
-		addWord(word, tree.id)
-		setValue('')
-	}
-
-	return (
-		<div className={styles.addWord}>
-			<input
-				value={value}
-				onChange={e => setValue(e.target.value)}
-				className={styles.input}
-			/>
-			<button
-				onClick={() => settleWord(value)}
-				type="button"
-				className={styles.button}
-			>
-				Add
-			</button>
-		</div>
-	)
-}
